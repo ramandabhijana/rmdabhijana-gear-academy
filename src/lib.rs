@@ -62,7 +62,10 @@ async fn process_handle(
                 false => Ok(PebblesEvent::CounterTurn(program_remove_count)),
             }
         }
-        PebblesAction::GiveUp => Ok(PebblesEvent::Won(Player::Program)),
+        PebblesAction::GiveUp => {
+            game.winner = Some(Player::Program);
+            Ok(PebblesEvent::Won(Player::Program))
+        }
         PebblesAction::Restart {
             difficulty,
             pebbles_count,
