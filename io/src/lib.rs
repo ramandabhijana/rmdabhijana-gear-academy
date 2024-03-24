@@ -1,3 +1,5 @@
+#![no_std]
+
 use gmeta::{In, InOut, Metadata, Out};
 use gstd::{Decode, Encode, TypeInfo};
 

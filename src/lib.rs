@@ -31,7 +31,7 @@ extern "C" fn handle() {
                     .expect("Error in sending reply PebblesEvent::Won");
             } else {
                 let program_remove_count = get_remove_count_for_difficulty(
-                    game.difficulty,
+                    game.difficulty.clone(),
                     game.max_pebbles_per_turn,
                     game.pebbles_count,
                 );
@@ -108,8 +108,11 @@ fn create_game(
 
     let mut pebbles_remaining = pebbles_count;
     if first_player == Player::Program {
-        let remove_count =
-            get_remove_count_for_difficulty(difficulty, max_pebbles_per_turn, pebbles_count);
+        let remove_count = get_remove_count_for_difficulty(
+            difficulty.clone(),
+            max_pebbles_per_turn,
+            pebbles_count,
+        );
         pebbles_remaining -= remove_count;
     }
 
