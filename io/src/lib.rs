@@ -39,6 +39,7 @@ pub enum Player {
 pub enum PebblesEvent {
     CounterTurn(u32),
     Won(Player),
+    GameRestarted,
 }
 
 #[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
@@ -55,7 +56,7 @@ pub struct PebblesMetadata;
 
 impl Metadata for PebblesMetadata {
     type Init = In<PebblesInit>;
-    type Handle = InOut<PebblesAction, PebblesEvent>;
+    type Handle = InOut<PebblesAction, Result<PebblesEvent, gstd::String>>;
     type State = Out<GameState>;
     type Reply = ();
     type Others = ();
