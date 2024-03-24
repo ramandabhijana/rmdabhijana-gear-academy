@@ -26,7 +26,7 @@ pub enum PebblesAction {
     },
 }
 
-#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
+#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo, PartialEq, Eq)]
 pub enum Player {
     #[default]
     User,
