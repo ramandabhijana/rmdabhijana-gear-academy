@@ -27,13 +27,20 @@ extern "C" fn handle() {
         PebblesAction::Turn(user_remove_count) => {
             // TODO: validate user_remove_count
 
-            game.pebbles_remaining -= user_remove_count;
+            let pebbles_remaining = game
+                .pebbles_remaining
+                .checked_sub(user_remove_count)
+                .unwrap_or(0);
 
-            if game.pebbles_remaining == 0 {
+            if pebbles_remaining == 0 {
+                game.pebbles_remaining = pebbles_remaining;
+                game.winner = Some(Player::User);
                 msg::reply(PebblesEvent::Won(Player::User), 0)
                     .expect("Error in sending reply PebblesEvent::Won");
                 return;
             }
+
+            game.pebbles_remaining -= pebbles_remaining;
 
             let program_remove_count = get_remove_count_for_difficulty(
                 game.difficulty.clone(),
@@ -41,14 +48,20 @@ extern "C" fn handle() {
                 game.pebbles_count,
             );
 
-            game.pebbles_remaining -= program_remove_count;
+            let pebbles_remaining = game
+                .pebbles_remaining
+                .checked_sub(program_remove_count)
+                .unwrap_or(0);
 
-            match game.pebbles_remaining == 0 {
+            match pebbles_remaining == 0 {
                 true => {
+                    game.pebbles_remaining = pebbles_remaining;
+                    game.winner = Some(Player::Program);
                     msg::reply(PebblesEvent::Won(Player::Program), 0)
                         .expect("Error in sending reply PebblesEvent::Won");
                 }
                 false => {
+                    game.pebbles_remaining -= pebbles_remaining;
                     msg::reply(PebblesEvent::CounterTurn(program_remove_count), 0)
                         .expect("Error in sending reply PebblesEvent::CounterTurn");
                 }
