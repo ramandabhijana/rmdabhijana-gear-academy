@@ -25,25 +25,32 @@ extern "C" fn handle() {
     let game = unsafe { GAME.as_mut().expect("Game not initialized") };
     match action {
         PebblesAction::Turn(user_remove_count) => {
-            // TODO: validate action payload
-            if game.pebbles_remaining - user_remove_count == 0 {
+            // TODO: validate user_remove_count
+
+            game.pebbles_remaining -= user_remove_count;
+
+            if game.pebbles_remaining == 0 {
                 msg::reply(PebblesEvent::Won(Player::User), 0)
                     .expect("Error in sending reply PebblesEvent::Won");
-            } else {
-                let program_remove_count = get_remove_count_for_difficulty(
-                    game.difficulty.clone(),
-                    game.max_pebbles_per_turn,
-                    game.pebbles_count,
-                );
-                match game.pebbles_remaining - program_remove_count == 0 {
-                    true => {
-                        msg::reply(PebblesEvent::Won(Player::Program), 0)
-                            .expect("Error in sending reply PebblesEvent::Won");
-                    }
-                    false => {
-                        msg::reply(PebblesEvent::CounterTurn(program_remove_count), 0)
-                            .expect("Error in sending reply PebblesEvent::Won");
-                    }
+                return;
+            }
+
+            let program_remove_count = get_remove_count_for_difficulty(
+                game.difficulty.clone(),
+                game.max_pebbles_per_turn,
+                game.pebbles_count,
+            );
+
+            game.pebbles_remaining -= program_remove_count;
+
+            match game.pebbles_remaining == 0 {
+                true => {
+                    msg::reply(PebblesEvent::Won(Player::Program), 0)
+                        .expect("Error in sending reply PebblesEvent::Won");
+                }
+                false => {
+                    msg::reply(PebblesEvent::CounterTurn(program_remove_count), 0)
+                        .expect("Error in sending reply PebblesEvent::CounterTurn");
                 }
             }
         }
