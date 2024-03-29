@@ -56,7 +56,7 @@ pub struct PebblesMetadata;
 
 impl Metadata for PebblesMetadata {
     type Init = In<PebblesInit>;
-    type Handle = InOut<PebblesAction, Result<PebblesEvent, gstd::String>>;
+    type Handle = InOut<PebblesAction, PebblesEvent>;
     type State = Out<GameState>;
     type Reply = ();
     type Others = ();
