@@ -11,14 +11,14 @@ fn reply(pebbles_event: PebblesEvent) {
     msg::reply(pebbles_event, 0).expect("Error during a replying with PebblesEvent");
 }
 
-#[cfg(test)]
+#[cfg(not(test))]
 fn get_random_u32() -> u32 {
     let salt = msg::id();
     let (hash, _num) = exec::random(salt.into()).expect("get_random_u32(): random call failed");
     u32::from_le_bytes([hash[0], hash[1], hash[2], hash[3]])
 }
 
-#[cfg(not(test))]
+#[cfg(test)]
 fn get_random_u32() -> u32 {
     let seed: [u8; 32] = msg::source().into();
     u32::from_le_bytes([seed[0], seed[1], seed[2], seed[3]]) % 2
