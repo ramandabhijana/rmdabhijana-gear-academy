@@ -10,7 +10,7 @@ pub struct PebblesInit {
     pub max_pebbles_per_turn: u32,
 }
 
-#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
+#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo, PartialEq, Eq)]
 pub enum DifficultyLevel {
     #[default]
     Easy,
@@ -42,7 +42,7 @@ pub enum PebblesEvent {
     GameRestarted,
 }
 
-#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
+#[derive(Debug, Default, Clone, Encode, Decode, TypeInfo, PartialEq, Eq)]
 pub struct GameState {
     pub pebbles_count: u32,
     pub max_pebbles_per_turn: u32,

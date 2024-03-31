@@ -5,12 +5,14 @@ pub const PEBBLES_GAME_ID: u64 = 2;
 pub const USER_1: u64 = 3;
 pub const USER_2: u64 = 4;
 
+#[cfg(test)]
 pub fn init_system() -> System {
     let system = System::new();
     system.init_logger();
     system
 }
 
+#[cfg(test)]
 pub fn init_pebbles_game(
     sys: &System,
     from: u64,
