@@ -42,8 +42,11 @@ impl PebblesGame {
 
         let mut pebbles_remaining = pebbles_count;
         if first_player == Player::Program {
-            let remove_count =
-                Self::get_program_remove_count(&difficulty, pebbles_count, max_pebbles_per_turn);
+            let remove_count = Self::get_program_remove_count(
+                &difficulty,
+                pebbles_remaining,
+                max_pebbles_per_turn,
+            );
             pebbles_remaining -= remove_count;
         }
 
@@ -75,7 +78,7 @@ impl PebblesGame {
 
         let program_remove_count = PebblesGame::get_program_remove_count(
             &self.0.difficulty,
-            self.0.pebbles_count,
+            self.0.pebbles_remaining,
             self.0.max_pebbles_per_turn,
         );
 
@@ -111,13 +114,15 @@ impl PebblesGame {
 
     fn get_program_remove_count(
         difficulty: &DifficultyLevel,
-        pebbles_count: u32,
+        pebbles_remaining: u32,
         max_pebbles_per_turn: u32,
     ) -> u32 {
         match difficulty {
-            DifficultyLevel::Easy => get_random_u32() % max_pebbles_per_turn + 1,
+            DifficultyLevel::Easy => {
+                (get_random_u32() % max_pebbles_per_turn + 1).min(max_pebbles_per_turn)
+            }
             DifficultyLevel::Hard => {
-                let remainder = (pebbles_count - 1) % (max_pebbles_per_turn + 1);
+                let remainder = pebbles_remaining % (max_pebbles_per_turn + 1);
                 if remainder == 0 {
                     max_pebbles_per_turn
                 } else {
