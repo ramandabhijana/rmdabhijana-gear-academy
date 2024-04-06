@@ -2,7 +2,9 @@ use gtest::{Program, System};
 use pebbles_game_io::{DifficultyLevel, PebblesInit};
 
 pub const PEBBLES_GAME_ID: u64 = 2;
+#[allow(unused)]
 pub const USER_1: u64 = 3;
+#[allow(unused)]
 pub const USER_2: u64 = 4;
 
 #[cfg(test)]
@@ -22,8 +24,8 @@ pub fn init_pebbles_game(
 ) -> Program<'_> {
     let game = Program::current_with_id(sys, PEBBLES_GAME_ID);
 
-    assert!(
-        game.send(
+    assert!(!game
+        .send(
             from,
             PebblesInit {
                 difficulty,
@@ -31,9 +33,7 @@ pub fn init_pebbles_game(
                 max_pebbles_per_turn: max_pebbles_per_turn.unwrap_or(5),
             },
         )
-        .main_failed()
-            == false
-    );
+        .main_failed());
 
     game
 }
